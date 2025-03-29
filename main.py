@@ -54,6 +54,7 @@ while True:
         # Skip replies
         if any(ref.get("type") == "replied_to" for ref in latest.get("referenced_tweets", [])):
             print("⏩ Skipped reply")
+            time.sleep(POLL_INTERVAL)
             continue
 
         tweet_id = latest["id"]
@@ -61,11 +62,11 @@ while True:
         tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
 
         if tweet_id != last_tweet_id:
-            message = f"🔊 New tweet from @{TWITTER_USERNAME}:
-
-{tweet_text}
-
-🔗 {tweet_url}"
+            message = (
+                f"🔊 New tweet from @{TWITTER_USERNAME}:\n\n"
+                f"{tweet_text}\n\n"
+                f"🔗 {tweet_url}"
+            )
 
             media_sent = False
 
