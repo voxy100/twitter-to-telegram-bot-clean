@@ -39,7 +39,7 @@ last_tweet_id = None
 while True:
     url = (
         f"https://api.twitter.com/2/users/{user_id}/tweets"
-        f"?max_results=5&tweet.fields=created_at,attachments"
+        f"?max_results=5&tweet.fields=created_at,attachments,referenced_tweets"
         f"&expansions=attachments.media_keys"
         f"&media.fields=url,preview_image_url,type"
     )
@@ -50,12 +50,22 @@ while True:
 
     if tweets:
         latest = tweets[0]
+
+        # Skip replies
+        if any(ref.get("type") == "replied_to" for ref in latest.get("referenced_tweets", [])):
+            print("⏩ Skipped reply")
+            continue
+
         tweet_id = latest["id"]
         tweet_text = latest["text"]
         tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
 
         if tweet_id != last_tweet_id:
-            message = f"🔊 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n🔗 {tweet_url}"
+            message = f"🔊 New tweet from @{TWITTER_USERNAME}:
+
+{tweet_text}
+
+🔗 {tweet_url}"
 
             media_sent = False
 
