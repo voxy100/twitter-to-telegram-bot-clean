@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
+
+# Ensure the required libraries are installed before running this script:
+# pip install python-telegram-bot requests python-dotenv
+
 import os
 import requests
 import time
 from telegram import Bot
 from dotenv import load_dotenv
-
-# Add encoding declaration at the top
-# -*- coding: utf-8 -*-
 
 load_dotenv()
 
@@ -41,6 +43,7 @@ while True:
         f"&expansions=attachments.media_keys"
         f"&media.fields=url,preview_image_url,type"
     )
+
     res = requests.get(url, headers=HEADERS)
     tweets = res.json().get("data", [])
     media = {m["media_key"]: m for m in res.json().get("includes", {}).get("media", [])}
@@ -52,20 +55,26 @@ while True:
         tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
 
         if tweet_id != last_tweet_id:
-            # Consolidated message into a single properly formatted string
-            message = f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n\U0001F517 {tweet_url}"
+            message = f"🔊 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n🔗 {tweet_url}"
+
+            media_sent = False
 
             if "attachments" in latest and "media_keys" in latest["attachments"]:
                 for key in latest["attachments"]["media_keys"]:
                     media_item = media.get(key)
                     if media_item:
                         if media_item["type"] == "photo":
-                            bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=media_item["url"], caption=message)
+                            image_url = media_item.get("url") or media_item.get("preview_image_url")
+                            if image_url:
+                                bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=image_url, caption=message)
+                                media_sent = True
+                                break
+                        elif media_item["type"] in ["video", "animated_gif"]:
+                            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message + "\n🎥 Video/GIF (see tweet)")
+                            media_sent = True
                             break
-                        elif media_item["type"] == "video":
-                            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message + "\n🎥 Video (visit tweet)")
-                            break
-            else:
+
+            if not media_sent:
                 bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
 
             last_tweet_id = tweet_id
