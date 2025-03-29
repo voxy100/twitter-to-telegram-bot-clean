@@ -19,6 +19,8 @@ POLL_INTERVAL = 60  # seconds
 
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
 HEADERS = {"Authorization": f"Bearer {TWITTER_BEARER_TOKEN}"}
+bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="✅ Telegram bot is connected!")
+
 
 def get_user_id(username):
     url = f"https://api.twitter.com/2/users/by/username/{username}"
