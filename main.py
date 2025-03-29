@@ -56,13 +56,10 @@ while True:
         tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
 
         if tweet_id != last_tweet_id:
+            # Fixed message formatting with proper line breaks and quotes
             message = (
-                f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:
-
-"
-                f"{tweet_text}
-
-"
+                f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:\n\n"
+                f"{tweet_text}\n\n"
                 f"\U0001F517 {tweet_url}"
             )
 
