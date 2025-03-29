@@ -50,11 +50,15 @@ while True:
 
         if tweet_id != last_tweet_id:
             # Replace emojis with Unicode escapes
-            message = f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n\U0001F517 {tweet_url}"
+            message = (
+                f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:
 
-{tweet_text}
+"
+                f"{tweet_text}
 
-🔗 {tweet_url}"
+"
+                f"\U0001F517 {tweet_url}"
+            )
 
             if "attachments" in latest and "media_keys" in latest["attachments"]:
                 for key in latest["attachments"]["media_keys"]:
@@ -64,7 +68,7 @@ while True:
                             bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=media_item["url"], caption=message)
                             break
                         elif media_item["type"] == "video":
-                            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message + "\n🎥 Video (visit tweet)")
+                            bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message + "\n\U0001F3A5 Video (visit tweet)")
                             break
             else:
                 bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
