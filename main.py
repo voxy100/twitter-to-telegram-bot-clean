@@ -49,7 +49,8 @@ while True:
         tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
 
         if tweet_id != last_tweet_id:
-            message = f"📢 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n🔗 {tweet_url}"
+            # Replace emojis with Unicode escapes
+            message = f"\U0001F4E2 New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\n\U0001F517 {tweet_url}"
 
 {tweet_text}
 
