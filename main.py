@@ -49,10 +49,6 @@ while True:
         if tweet_id != last_tweet_id:
             tweet_url = f"https://x.com/{TWITTER_USERNAME}/status/{tweet_id}"
             message = f"New tweet from @{TWITTER_USERNAME}:\n\n{tweet_text}\n\nLink: {tweet_url}"
-
-{tweet_text}
-
-🔗 {tweet_url}"
             bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
             last_tweet_id = tweet_id
 
