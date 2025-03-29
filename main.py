@@ -34,6 +34,10 @@ if not user_id:
     print("Bot stopped: Could not fetch user ID")
     exit()
 
+bot.send_message(chat_id=TELEGRAM_CHAT_ID, text="✅ Telegram bot is connected!")
+exit()
+
+
 last_tweet_id = None
 
 while True:
